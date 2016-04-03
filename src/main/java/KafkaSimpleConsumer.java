@@ -16,7 +16,7 @@ public class KafkaSimpleConsumer {
     public static void main(String[] args) {
 
         Properties config = new Properties();
-        config.put("zookeeper.connect", "localhost:2181");
+        config.put("zookeeper.connect", "localhost:2181"); // Zookeeper address
         config.put("zookeeper.connectiontimeout.ms", "10000");
         config.put("group.id", "default");
 
@@ -25,7 +25,7 @@ public class KafkaSimpleConsumer {
         ConsumerConnector consumerConnector = Consumer.createJavaConsumerConnector(consumerConfig);
 
         Map<String, Integer> topicCountMap = new HashMap<>();
-        topicCountMap.put("couchbaseTopic", 1);
+        topicCountMap.put("couchbaseTopic", 1);  // Topic to track
 
         Map<String, List<KafkaStream<byte[], byte[]>>> consumerMap = consumerConnector.createMessageStreams(topicCountMap);
 
@@ -37,7 +37,7 @@ public class KafkaSimpleConsumer {
         Cluster cluster = CouchbaseCluster.create(nodes);
         final Bucket bucket = cluster.openBucket("kafkaExample");
 
-        try {
+        try { // Consuming messages
             for (final KafkaStream<byte[], byte[]> stream : streams) {
                 for (MessageAndMetadata<byte[], byte[]> msgAndMetaData : stream) {
                     String msg = convertPayloadToString(msgAndMetaData.message());
